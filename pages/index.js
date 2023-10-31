@@ -31,7 +31,7 @@ export default function Home() {
         hello world, this is the homepage
       </h1>
 
-      <Button className="ml-4 "
+      <Button variant="destructive" className="ml-4 "
         onClick={() =>
           signOut('spotify', { callbackUrl: "/" }
           )}>
