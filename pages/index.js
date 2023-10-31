@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { signOut, useSession } from 'next-auth/react'
+import LeftNav from '@/components/LeftNav'
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -25,7 +26,7 @@ export default function Home() {
 
 
   return (
-    <main className="pl-80"> {/* Add left padding */}
+    <main className="pl-80">
       <h1 className="text-6xl font-bold flex text-center">
         hello world, this is the homepage
       </h1>
@@ -36,13 +37,12 @@ export default function Home() {
           )}>
         Log out {session?.user?.name}
       </Button>
-      <h2>
-      </h2>
-      <div className="flex flex-col">
+
+      {/*<div className="flex flex-col">
         {playlists.map((playlist) => (
           <div key={playlist.id}>{playlist.name}</div>
         ))}
-      </div>
+      </div> */}
     </main >
   )
 }
