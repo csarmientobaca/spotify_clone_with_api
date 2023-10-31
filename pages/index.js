@@ -2,48 +2,50 @@ import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { signOut, useSession } from 'next-auth/react'
 import LeftNav from '@/components/LeftNav'
+import Image from 'next/image'
+import Playlist from '@/components/Playlist'
+import Player from '@/components/Player'
 
 export default function Home() {
-  const { data: session, status } = useSession()
-  const [x, setX] = useState('')
-  const [playlists, setPlaylists] = useState([])
+  const [view, setView] = useState("search") // ["search", "library", "playlist", "artist"]
 
-  useEffect(() => {
-    async function f() {
-      if (session && session.accessToken) {
-        setX(session.accessToken)
-        const response = await fetch('https://api.spotify.com/v1/me/playlists', {
-          headers: {
-            'Authorization': `Bearer ${session.accessToken}`
-          }
-        })
-        const data = await response.json()
-        setPlaylists(data.items)
-      }
-    }
-    f()
-  }, [session])
+
+  const [globalPlaylistId, setGlobalPlaylistId] = useState(null)
+  const [globalArtistId, setGlobalArtistId] = useState(null)
+  const [globalCurrentSongId, setGlobalCurrentSongId] = useState(null)
+  const [globalIsTrackPlaying, setGlobalIsTrackPlaying] = useState(false)
 
 
   return (
-    <main className="pl-80">
-      <h1 className="text-6xl font-bold flex text-center">
+    <>
+      <main className="pl-80">
+        {/* <h1 className="text-6xl font-bold flex text-center">
         hello world, this is the homepage
-      </h1>
+      </h1> */}
+        <LeftNav
+          view={view}
+          setView={setView}
+          setGlobalPlaylistId={setGlobalPlaylistId}
+        />
+        {view === "playlist" &&
+          <Playlist
+            setView={setView}
+            setGlobalArtistId={setGlobalArtistId}
+            globalPlaylistId={globalPlaylistId}
+            setGlobalCurrentSongId={setGlobalCurrentSongId}
+            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+          />}
+        <div className=" ">
+          <Player
+            globalCurrentSongId={globalCurrentSongId}
+            setGlobalCurrentSongId={setGlobalCurrentSongId}
+            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+            globalIsTrackPlaying={globalIsTrackPlaying}
+          />
+        </div>
+      </main >
 
-      <Button variant="destructive" className="ml-4 "
-        onClick={() =>
-          signOut('spotify', { callbackUrl: "/" }
-          )}>
-        Log out {session?.user?.name}
-      </Button>
-
-      {/*<div className="flex flex-col">
-        {playlists.map((playlist) => (
-          <div key={playlist.id}>{playlist.name}</div>
-        ))}
-      </div> */}
-    </main >
+    </>
   )
 }
 

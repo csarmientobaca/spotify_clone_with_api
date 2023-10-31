@@ -8,7 +8,7 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
-      <LeftNav />
+      {/* <LeftNav /> */}
       <Component {...pageProps} />
     </SessionProvider>
   )

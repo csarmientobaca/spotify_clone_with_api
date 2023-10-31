@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { AiOutlineHome, AiOutlineSearch, AiOutlineDatabase } from 'react-icons/ai';
-import { useSession } from 'next-auth/react'
+import { useSession, s } from 'next-auth/react'
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-const LeftNav = () => {
+const LeftNav = ({ view, setView, setGlobalPlaylistId }) => {
     const { data: session, status } = useSession()
     const [playlists, setPlaylists] = useState([])
 
@@ -23,9 +24,6 @@ const LeftNav = () => {
         f()
     }, [session])
 
-
-
-
     return (
         <div className="bg-gray-900 h-screen w-64 px-4 py-8 fixed left-0 top-0">
             <div className="flex items-center justify-center mb-8">
@@ -35,20 +33,25 @@ const LeftNav = () => {
                     className="h-8"
                 />
             </div>
-            <nav>
+            <nav className=''>
                 <ul>
                     <li className="mb-4">
-                        <Button className="bg-gray-700 w-full">
-                            <div className="flex items-center">
-                                <AiOutlineHome className='h-5 w-5 mr-4' />
-                                <p className="flex items-center">
-                                    Home
-                                </p>
-                            </div>
-                        </Button>
+                        <Link href={"/"}>
+                            <Button className="bg-gray-700 w-full">
+                                <div className="flex items-center">
+                                    <AiOutlineHome className='h-5 w-5 mr-4' />
+                                    <p className="flex items-center">
+                                        Home
+                                    </p>
+                                </div>
+                            </Button>
+                        </Link>
                     </li>
+
                     <li className="mb-4">
-                        <Button className="bg-gray-700 w-full">
+                        <Button
+                            onClick={() => setView("search")}
+                            className="bg-gray-700 w-full">
                             <div className="flex items-center">
                                 <AiOutlineSearch className='h-5 w-5 mr-4' />
                                 <p className="flex items-center">
@@ -58,11 +61,13 @@ const LeftNav = () => {
                         </Button>
                     </li>
                     <li className="mb-4">
-                        <Button className="bg-gray-700 w-full">
+                        <Button
+                            onClick={() => setView("library")}
+                            className="bg-gray-700 w-full">
                             <div className="flex items-center">
                                 <AiOutlineDatabase className='h-5 w-5 mr-4' />
                                 <p className="flex items-center">
-                                    Your Library
+                                    Your library
                                 </p>
                             </div>
                         </Button>
@@ -71,16 +76,18 @@ const LeftNav = () => {
                 {
                     playlists.map((playlist) => {
                         return (
-                            <p
-                                onClick={() => {
-                                    setView("playlist")
-                                    setGlobalPlaylistId(playlist.id)
-                                }}
-                                key={playlist.id}
-                                className='cursor-default hover:text-white w-52 truncate'
-                            >
-                                {playlist.name}
-                            </p>
+                            <div className=' text-neutral-400  border-neutral-900 p-5 text-sm hidden md:inline-flex'>
+                                <p
+                                    onClick={() => {
+                                        setView("playlist")
+                                        setGlobalPlaylistId(playlist.id)
+                                    }}
+                                    key={playlist.id}
+                                    className='cursor-default hover:text-white w-52 truncate'
+                                >
+                                    {playlist.name}
+                                </p>
+                            </div>
                         )
                     })
                 }
