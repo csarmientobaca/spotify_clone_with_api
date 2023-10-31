@@ -19,6 +19,7 @@ export default function Home() {
   return (
     <>
       <main className="pl-80">
+
         {/* <h1 className="text-6xl font-bold flex text-center">
         hello world, this is the homepage
       </h1> */}
